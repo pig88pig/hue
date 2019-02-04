@@ -110,7 +110,7 @@
             $(element).removeClass('collapsed')
           }
         });
-        ApiHelper.getInstance().withTotalStorage('sidebar', 'collapsed', self.collapsed, false);
+        window.apiHelper.withTotalStorage('sidebar', 'collapsed', self.collapsed, false);
 
         self.activeUrl = ko.observable();
 
