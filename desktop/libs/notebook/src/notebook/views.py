@@ -313,6 +313,26 @@ def copy(request):
 
 
 @check_document_access_permission()
+def download_new(request):
+  if not ENABLE_DOWNLOAD.get():
+    return serve_403_error(request)
+
+  notebook = json.loads(request.POST.get('notebook', '{}'))
+  snippet = json.loads(request.POST.get('snippet', '{}'))
+  file_format = request.POST.get('format', 'csv')
+
+  response = get_api(request, snippet).download(notebook, snippet, file_format, user_agent=request.META.get('HTTP_USER_AGENT'))
+
+  if response:
+    request.audit = {
+      'operation': 'DOWNLOAD',
+      'operationText': 'User %s downloaded results from %s as %s' % (request.user.username, _get_snippet_name(notebook), file_format),
+      'allowed': True
+    }
+
+  return response
+
+@check_document_access_permission()
 def download(request):
   if not ENABLE_DOWNLOAD.get():
     return serve_403_error(request)

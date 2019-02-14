@@ -202,11 +202,28 @@ INSTALLED_APPS = [
 
     # App that keeps track of failed logins.
     'axes',
+    'django_celery_results',
 ]
 
 LOCALE_PATHS = [
   get_desktop_root('core/src/desktop/locale')
 ]
+
+# Celery
+CELERY_BROKER_URL='pyamqp://prakash:prakash@localhost//'
+#CELERY_BIN=
+#CELERY_RESULT_BACKEND='django-db'
+CELERY_APP="desktop"
+CELERYD_OPTS="--time-limit=300 --concurrency=8"
+
+# %n will be replaced with the first part of the nodename.
+CELERYD_LOG_FILE="/var/log/celery/%n%I.log"
+CELERYD_PID_FILE="/var/run/celery/%n.pid"
+CELERY_CREATE_DIRS=1
+CELERYD_USER="root"
+CELERYD_GROUP="root"
+
+CELERY_RESULT_BACKEND = 'django-db'
 
 # Keep default values up to date
 GTEMPLATE_CONTEXT_PROCESSORS = (
