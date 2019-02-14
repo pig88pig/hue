@@ -53,6 +53,7 @@ from useradmin.forms import SyncLdapUsersGroupsForm, AddLdapGroupsForm, AddLdapU
   validate_last_name, PasswordChangeForm
 
 from desktop.auth.backend import is_admin
+from useradmin.tasks import add
 
 LOG = logging.getLogger(__name__)
 
@@ -64,6 +65,7 @@ def is_ldap_setup():
   return bool(LDAP.LDAP_SERVERS.get()) or LDAP.LDAP_URL.get() is not None
 
 def list_users(request):
+  add.delay(4, 4)
 
   return render("list_users.mako", request, {
       'users': User.objects.all(),
